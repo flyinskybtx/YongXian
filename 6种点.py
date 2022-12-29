@@ -11,15 +11,6 @@ from tqdm import trange
 from agents import Radar, Commander, Missile, Enemy
 from yongxian import create_pheudo_random_pos, create_plotly_nodes, create_random_pos
 
-NUM_RADAR = 32
-NUM_COMMANDER = 32
-NUM_MISSILE = 64
-NUM_ENEMY = 10
-
-RADAR_Z = 1
-COMMANDER_Z = 0
-MISSILE_Z = -1
-
 BATTLE_GROUD_SIZE = int(1e4)
 DEFEND_RADIUS = int(1e3)
 R2C_DIST = 4e2
@@ -27,7 +18,7 @@ C2C_DIST = 5e2
 C2M_DIST = 4e2
 
 CONNECTION_RADIUS = 4e2
-CONNECTION_RATE = 0.4
+CONNECTION_RATE = 0.2
 
 NUMBERS = {
     "预警探测": 300,

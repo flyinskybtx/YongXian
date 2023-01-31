@@ -1,9 +1,6 @@
 import numpy as np
 
-from agents.alarm_radar import AlarmRadar
-from agents.command_unit import CommandUnit
-from agents.firing_unit import FiringUnit
-from agents.tracking_radar import TrackingRadar
+from agents import *
 from networkx_prj.config import *
 
 from agents import *
@@ -15,20 +12,27 @@ if __name__ == '__main__':
         "预警探测": np.random.uniform(-1, 1, (NUM_NODES["预警探测"], 2)) * DEFEND_AREA_RADIUS,
         "跟踪识别": np.random.uniform(-1, 1, (NUM_NODES["跟踪识别"], 2)) * DEFEND_AREA_RADIUS,
     }
-    node_class_mapping = {
-        "火力": FiringUnit,
-        "指挥控制": CommandUnit,
-        "预警探测": AlarmRadar,
-        "跟踪识别": TrackingRadar,
-    }
+    
+    
+    def get_node_class(_type: str, ) -> BaseUnit:
+        return {
+            "火力": FiringUnit,
+            "指挥控制": CommandUnit,
+            "预警探测": AlarmRadar,
+            "跟踪识别": TrackingRadar,
+        }[_type]
+    
     
     all_nodes = {}
     all_edges = {}
     
     for _type, _poses in poses.items():
-        NodeClass = node_class_mapping[_type]
+        NodeClass = get_node_class(_type)
         all_nodes[_type] = []
         for i, pos in enumerate(_poses):
             name = '-'.join([_type, f'{i:03d}'])
+            # noinspection PyCallingNonCallable
             _node = NodeClass(name=name, pos=pos, t=0)
             all_nodes[_type].append(_node)
+    
+    print(all_nodes.keys())

@@ -2,8 +2,15 @@ import networkx as nx
 import numpy as np
 from matplotlib import pyplot as plt
 
-from networkx_prj.config import LAYERS
-from networkx_prj.create_scenario import build_group_edges, build_grouped_nodes, group_edges
+# from networkx_prj.config import LAYERS
+# from networkx_prj.create_scenario import build_group_edges, build_grouped_nodes, group_edges
+
+from config import LAYERS
+from create_scenario import build_group_edges, build_grouped_nodes, group_edges
+
+
+
+
 
 
 def get_nodes_pos(GG, nodes_list):
@@ -23,7 +30,7 @@ def build_group_graph(group_nodes):
     for group, nodes in group_nodes.items():
         G = nx.Graph(name=group)
         for node in nodes:
-            G.add_node(node.id, type=group, pos=node.pos,
+            G.add_node(node.id, type=group, pos=node.src_pos,
                        color=node.color, symbol=node.symbol, layer=node.layer)
         graph_dict[group] = G
     return graph_dict
@@ -34,7 +41,7 @@ def build_whole_graph(group_nodes, group_edges):
     # 节点
     for group, nodes in group_nodes.items():
         for node in nodes:
-            GG.add_node(node.id, type=group, pos=node.pos,
+            GG.add_node(node.id, type=group, pos=node.src_pos,
                         color=node.color, symbol=node.symbol, layer=node.layer)
     # 边
     for group, edges in group_edges.items():

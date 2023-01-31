@@ -14,10 +14,10 @@ class Radar:
     t: int = 0
     
     def can_detect(self, enemy):
-        if enemy.pos is None:
+        if enemy.src_pos is None:
             return False
         else:
-            return np.linalg.norm(enemy.pos - self.pos) < self.detect_dist
+            return np.linalg.norm(enemy.src_pos - self.pos) < self.detect_dist
     
     def update(self, enemy_list: List):
         self.t += 1

@@ -3,13 +3,8 @@ from copy import deepcopy
 from dataclasses import dataclass, field
 
 import numpy as np
-from matplotlib import pyplot as plt
 from scipy.spatial.distance import cdist
 import plotly.graph_objects as go
-from tqdm import trange
-
-from agents import Radar, Commander, Missile, Enemy
-from yongxian import create_pheudo_random_pos, create_plotly_nodes, create_random_pos
 
 BATTLE_GROUD_SIZE = int(1e4)
 DEFEND_RADIUS = int(1e3)
@@ -100,7 +95,7 @@ if __name__ == '__main__':
     nodes = {}
     for key in units.keys():
         for unit in units[key]:
-            x, y = unit.pos
+            x, y = unit.src_pos
             z = unit.layer
             name = unit.id
             color = unit.color
@@ -114,13 +109,13 @@ if __name__ == '__main__':
     for key1, key2 in pairs:
         if abs(LAYERS[key1] - LAYERS[key2]) == 1:
             for u1 in units[key1]:
-                x1, y1 = u1.pos
+                x1, y1 = u1.src_pos
                 z1 = u1.layer
                 id1 = u1.id
                 color = u1.color
                 
                 for u2 in units[key2]:
-                    x2, y2 = u2.pos
+                    x2, y2 = u2.src_pos
                     z2 = u2.layer
                     id2 = u2.id
                     

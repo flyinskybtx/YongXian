@@ -1,8 +1,8 @@
 
 enemy_nodes = []
 for enemy in enemies:
-    if enemy.pos is not None:
-        x, y = enemy.pos
+    if enemy.src_pos is not None:
+        x, y = enemy.src_pos
         _nodes = [go.Scatter3d(x=[x], y=[y], z=[z], mode='markers', showlegend=False,
                                marker={'color': '#19d3f3',
                                        'size': 5,

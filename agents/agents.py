@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Union
+from typing import Union, Dict
 
 import numpy as np
 
@@ -41,15 +41,23 @@ class EnemyUnit(BaseUnit):
 @dataclass
 class AlarmRadar(BaseUnit):
     delay: int = 10
-    radius: float = 500
-    connected_alarm_radars: list = field(default_factory=list, init=False)
-    connected_command_units: list = field(default_factory=list, init=False)
+    radius: dict = field(default_factory=dict, init=True)
+    connections: dict = field(default_factory=dict, init=True)
     
+    # connected_alarm_radars: list = field(default_factory=list, init=False)
+    # connected_command_units: list = field(default_factory=list, init=False)
+
     def __post_init__(self):
         super(AlarmRadar, self).__post_init__()
+        self.radius = self.radius or {'预警探测': 200,
+                                      '指挥控制': 200,
+                                      '敌方单位': 400, }
         self.target_list = []
         self.observed_list = []
-        self.yaml_fields += ['delay', 'radius']
+        for _type in ['预警探测', '指挥控制']:
+            if _type not in self.connections:
+                self.connections[_type] = []
+        self.yaml_fields += ['delay', 'radius', 'connections']
     
     def update(self):
         # todo：更新预警列表
@@ -95,14 +103,21 @@ class AlarmRadar(BaseUnit):
 @dataclass
 class FiringUnit(BaseUnit):
     volume: int = 4
-    radius: int = 100
+    radius: dict = field(default_factory=dict, init=True)
     speed: int = 7
-    connected_command_units: list = field(default_factory=list, init=False)
+    connections: dict = field(default_factory=dict, init=True)
+
+    # connected_command_units: list = field(default_factory=list, init=False)
     
     def __post_init__(self):
         super(FiringUnit, self).__post_init__()
+        self.radius = self.radius or {'指挥控制': 200,
+                                      '敌方单位': 100, }
         self.enemy_list = []
-        self.yaml_fields += ['volume', 'radius', 'speed']
+        for _type in ['指挥控制']:
+            if _type not in self.connections:
+                self.connections[_type] = []
+        self.yaml_fields += ['volume', 'radius', 'speed', 'connections']
     
     def update(self):
         super(FiringUnit, self).update()
@@ -137,16 +152,23 @@ class FiringUnit(BaseUnit):
 
 @dataclass
 class TrackingRadar(BaseUnit):
-    radius: float = 200
-    connected_command_units: list = field(default_factory=list, init=False)
-    connected_tracking_radars: list = field(default_factory=list, init=False)
+    radius: dict = field(default_factory=dict, init=True, )
+    connections: dict = field(default_factory=dict, init=True)
+
+    # connected_command_units: list = field(default_factory=list, init=False)
+    # connected_tracking_radars: list = field(default_factory=list, init=False)
     
     def __post_init__(self):
         super(TrackingRadar, self).__post_init__()
-        
+        self.radius = self.radius or {'指挥控制': 200,
+                                      '跟踪识别': 200,
+                                      '敌方单位': 200, }
+        for _type in ['跟踪识别', '指挥控制']:
+            if _type not in self.connections:
+                self.connections[_type] = []
         self.tracking_list = []
         self.target_list = []
-        self.yaml_fields += ['radius']
+        self.yaml_fields += ['radius', 'connections']
     
     def update(self):
         # todo: 更新消息
@@ -173,16 +195,28 @@ class TrackingRadar(BaseUnit):
 
 @dataclass
 class CommandUnit(BaseUnit):
-    connected_command_units: list = field(default_factory=list, init=False)
-    connected_alarm_radars: list = field(default_factory=list, init=False)
-    connected_tracking_radars: list = field(default_factory=list, init=False)
-    connected_firing_units: list = field(default_factory=list, init=False)
-    
+    radius: dict = field(default_factory=dict, init=True)
+    # connected_command_units: list = field(default_factory=list, init=False)
+    # connected_alarm_radars: list = field(default_factory=list, init=False)
+    # connected_tracking_radars: list = field(default_factory=list, init=False)
+    # connected_firing_units: list = field(default_factory=list, init=False)
+    connections: dict = field(default_factory=dict, init=True)
+
     def __post_init__(self):
         super(CommandUnit, self).__post_init__()
+        self.radius = self.radius or {'指挥控制': 200,
+                                      '预警探测': 200,
+                                      '跟踪识别': 200,
+                                      '火力': 200,
+                                      '网络攻防': 200,
+                                      '电子对抗': 200, }
+        for _type in ['预警探测', '指挥控制', '跟踪识别', '火力']:
+            if _type not in self.connections:
+                self.connections[_type] = []
         self.observed_list = []
         self.enemy_list = []
         self.tracked_list = []
+        self.yaml_fields += ['radius', 'connections']
     
     def update(self):
         # todo

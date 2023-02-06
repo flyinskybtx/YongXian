@@ -9,10 +9,6 @@ from config import LAYERS
 from create_scenario import build_group_edges, build_grouped_nodes, group_edges
 
 
-
-
-
-
 def get_nodes_pos(GG, nodes_list):
     return {n: GG.nodes()[n]['pos'] for n in nodes_list}
 

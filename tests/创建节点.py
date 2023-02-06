@@ -1,3 +1,6 @@
+import functools
+import itertools
+
 import numpy as np
 
 from agents import *
@@ -35,4 +38,7 @@ if __name__ == '__main__':
             _node = NodeClass(name=name, pos=pos, t=0)
             all_nodes[_type].append(_node)
     
-    print(all_nodes.keys())
+    filename = '创建节点.yml'
+    stream = to_yaml(all_nodes, filename)
+    all_nodes = from_yaml(stream=filename, )
+    print(all_nodes)

@@ -1,5 +1,6 @@
 import os
 from dataclasses import dataclass, field
+from typing import Optional
 
 import numpy as np
 import yaml
@@ -23,6 +24,7 @@ class BaseUnit:
     color: str = field(init=False, default_factory=str)
     symbol: str = field(init=False, default_factory=str)
     layer: int = field(init=False, default_factory=str)
+    unit_type: Optional[str] = None
 
     def __post_init__(self):
         unit_type = self.name.split('-')[0]
